@@ -4,18 +4,41 @@ from src.ApiProxy import ApiProxy
 from bs4 import BeautifulSoup
 from url_normalize import url_normalize
 
-GOOGLE_SEARCH_ENDPOINT = 'https://www.google.com/search?num=1008&q=site:'
+GOOGLE_SEARCH_ENDPOINT = 'https://www.google.com/search?q=site:'
 
 
 class Collector:
 
     def __init__(self):
         self._website = ''
+        self._per_page = 1000
+        self._current_page = 0
+        self._max_page = 3
         self._suggested_pages = []
+
+
+    def _get_current_page_url(self):
+        return GOOGLE_SEARCH_ENDPOINT + self._website + '&start=' + str(self._per_page * self._current_page)
+
+
+    def set_current_page(self, current_page):
+        self._current_page = current_page
 
 
     def set_website(self, website):
         self._website = website
+
+
+    def set_max_pages(self, max_pages):
+        self._max_pages = max_pages
+
+
+    def set_per_page(self, per_page):
+        self._per_page = per_page
+
+
+    def _next_page(self):
+        self._current_page = self._current_page + 1
 
 
     def get_suggested_pages(self):
@@ -40,8 +63,7 @@ class Collector:
         return False
 
 
-    def _google_search(self):
-        url = GOOGLE_SEARCH_ENDPOINT + self._website
+    def _google_search(self, url):
         api_proxy = ApiProxy()
         html = api_proxy.get_page_html(url)
         if not html:
@@ -50,23 +72,26 @@ class Collector:
 
 
     def handle(self):
-        google_response = self._google_search()
-        if google_response:
-            soup_links = google_response.select('div.yuRUbf > a')
-            if soup_links:
-                for soup_link in soup_links:
-                    link_href = soup_link.get('href')
-                    filtred_link = self._filter_link(link_href)
-                    if filtred_link:
-                        self._suggested_pages.append(filtred_link)
-            else:
-                soup_links = google_response.find_all("a")
-                for soup_link in soup_links:
-                    link_href = soup_link.get('href')
-                    if link_href and "&sa=U&url=" in link_href and not "webcache" in link_href:
-                        try:
-                            link = link_href.split("&sa=U&url=")[1].split('&ved=')[0]
-                            filtred_link = self._filter_link(link)
+        for i in range(self._max_page):
+            url = self._get_current_page_url()
+            google_response = self._google_search(url)
+            if google_response:
+                soup_links = google_response.select('div.yuRUbf > a')
+                if soup_links:
+                    for soup_link in soup_links:
+                        link_href = soup_link.get('href')
+                        filtred_link = self._filter_link(link_href)
+                        if filtred_link:
                             self._suggested_pages.append(filtred_link)
-                        except:
-                            continue
+                else:
+                    soup_links = google_response.find_all("a")
+                    for soup_link in soup_links:
+                        link_href = soup_link.get('href')
+                        if link_href and "&sa=U&url=" in link_href and not "webcache" in link_href:
+                            try:
+                                link = link_href.split("&sa=U&url=")[1].split('&ved=')[0]
+                                filtred_link = self._filter_link(link)
+                                self._suggested_pages.append(filtred_link)
+                            except:
+                                continue
+            self._next_page()
