@@ -30,15 +30,14 @@ class Collector:
         return url_normalize(url)
 
 
-    def _normalize_soup_links(self, soup_links):
-        links = []
-        for link in soup_links:
-            href = link.get('href')
-            url = self._normalize_url(href)
-            if (not url.endswith('.pdf') and not url.endswith('.docx') and not url.endswith(
-                    '.csv') and not url.endswith('.xlsx')):
-                links.append(url)
-        return links
+    def _filter_link(self, link):
+        url = self._normalize_url(link)
+        if (not url.endswith('.pdf') and 
+            not url.endswith('.docx') and 
+            not url.endswith('.csv') and 
+            not url.endswith('.xlsx')):
+            return url
+        return False
 
 
     def _google_search(self):
@@ -53,5 +52,21 @@ class Collector:
     def handle(self):
         google_response = self._google_search()
         if google_response:
-            soup_links = google_response.select('div.kCrYT > a')
-            return self._normalize_soup_links(soup_links)
+            soup_links = google_response.select('div.yuRUbf > a')
+            if soup_links:
+                for soup_link in soup_links:
+                    link_href = soup_link.get('href')
+                    filtred_link = self._filter_link(link_href)
+                    if filtred_link:
+                        self._suggested_pages.append(filtred_link)
+            else:
+                soup_links = google_response.find_all("a")
+                for soup_link in soup_links:
+                    link_href = soup_link.get('href')
+                    if link_href and "&sa=U&url=" in link_href and not "webcache" in link_href:
+                        try:
+                            link = link_href.split("&sa=U&url=")[1].split('&ved=')[0]
+                            filtred_link = self._filter_link(link)
+                            self._suggested_pages.append(filtred_link)
+                        except:
+                            continue
