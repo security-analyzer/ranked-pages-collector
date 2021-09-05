@@ -11,14 +11,14 @@ class Collector:
 
     def __init__(self):
         self._website = ''
-        self._per_page = 1000
+        self._per_page = 100
         self._current_page = 0
-        self._max_page = 3
+        self._max_page = 5
         self._suggested_pages = []
 
 
     def _get_current_page_url(self):
-        return GOOGLE_SEARCH_ENDPOINT + self._website + '&start=' + str(self._per_page * self._current_page)
+        return GOOGLE_SEARCH_ENDPOINT + self._website + '&num=' + str(self._per_page) + '&start=' + str(self._per_page * self._current_page)
 
 
     def set_current_page(self, current_page):
@@ -74,6 +74,7 @@ class Collector:
     def handle(self):
         for i in range(self._max_page):
             url = self._get_current_page_url()
+            print(url)
             google_response = self._google_search(url)
             if google_response:
                 soup_links = google_response.select('div.yuRUbf > a')
@@ -94,4 +95,5 @@ class Collector:
                                 self._suggested_pages.append(filtred_link)
                             except:
                                 continue
+
             self._next_page()
