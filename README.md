@@ -8,7 +8,7 @@ Fully configurable automated python script to collect most visted pages based on
 
 ## Usage
 
-This project is still under developpement, its documentation is not yet implemented but coming soon
+This project is still under developpement, its documentation is not yet implemented if you want to have an idea about how to use it you can check ```main.py``` file
 
 
 ## Security
