@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
+from src.Utils import config
 import requests
 
-SCRAPER_API_KEY = 'f7da5ce9a6946fd8e7670ed9d49ac97c'
-SCRAPER_API_ENDPOINT = 'http://api.scraperapi.com?api_key=' + SCRAPER_API_KEY + '&url='
-RETRY_COUNT = 3
 ERROR_MESSAGE = 'Request failed. You will not be charged for this request'
 
 class ApiProxy:
 
     def get_page_html(self, url):
+        configs = config('scraperapi')
+        scraper_api_endpoint = configs['scraper_api_endpoint'] + '?api_key=' + configs['scraper_api_key'] + '&url=' + url
+        retry_count = config('api_proxy')['retry_count']
         try:
             retry = 0
-            response = requests.get(SCRAPER_API_ENDPOINT + url)
-            while retry <= RETRY_COUNT and ERROR_MESSAGE in response.text:
-                response = requests.get(SCRAPER_API_ENDPOINT + url)
+            response = requests.get(scraper_api_endpoint)
+            while retry <= retry_count and ERROR_MESSAGE in response.text:
+                response = requests.get(scraper_api_endpoint)
                 retry = retry + 1
             return response.text
         except:

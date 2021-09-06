@@ -1,0 +1,10 @@
+scraperapi:
+  scraper_api_endpoint: 'http://api.scraperapi.com'
+  scraper_api_key: 'f7da5ce9a6946fd8e7670ed9d49ac97c'
+
+api_proxy:
+  retry_count: 3
+
+collector:
+  results_per_page: 100
+  max_pages: 5

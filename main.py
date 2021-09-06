@@ -1,5 +1,4 @@
-from url_normalize.tools import unquote
-from src.Utils import save_array_as_file
+from src.Utils import config, save_array_as_file
 from src.Collector import Collector
 
 websites = [
@@ -18,8 +17,9 @@ websites = [
 ]
 
 def main():
+    collector = Collector()
+    
     for website in websites:
-        collector = Collector()
         website_domain = website.split('://')[1]
         print("Started processing : " + website)
         collector.set_website(website_domain)

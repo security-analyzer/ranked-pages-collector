@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-import re
-
+from src.Utils import config
 from url_normalize.tools import unquote
 from src.ApiProxy import ApiProxy
 from bs4 import BeautifulSoup
@@ -12,10 +11,11 @@ GOOGLE_SEARCH_ENDPOINT = 'https://www.google.com/search?q=site:'
 class Collector:
 
     def __init__(self):
+        configs = config('collector')
         self._website = ''
-        self._per_page = 100
+        self._per_page = configs['results_per_page']
         self._current_page = 0
-        self._max_page = 5
+        self._max_pages = configs['max_pages']
         self._suggested_pages = []
 
 
@@ -31,8 +31,8 @@ class Collector:
         self._website = website
 
 
-    def set_max_pages(self, max_pages):
-        self._max_pages = max_pages
+    def set_max_pagess(self, max_pages):
+        self._max_pagess = max_pages
 
 
     def set_per_page(self, per_page):
@@ -75,7 +75,7 @@ class Collector:
 
 
     def handle(self):
-        for i in range(self._max_page):
+        for i in range(self._max_pages):
             url = self._get_current_page_url()
             google_response = self._google_search(url)
             if google_response:
