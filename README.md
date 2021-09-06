@@ -2,12 +2,12 @@
 
 Fully configurable automated python script to collect most visted pages based on dorks (google, bing)
 
-### Usage
+## Usage
 
 This project is still under developpement, its documentation is not yet implemented but coming soon
 
 
-### Security
+## Security
 
 If you discover any security related issues, please email mouad.ziani1997@gmail.com instead of using the issue tracker.
 
