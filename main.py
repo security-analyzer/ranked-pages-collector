@@ -1,4 +1,4 @@
-from src.Utils import config, save_array_as_file
+from src.Utils import banner, save_array_as_file
 from src.Collector import Collector
 
 websites = [
@@ -18,7 +18,6 @@ websites = [
 
 def main():
     collector = Collector()
-    
     for website in websites:
         website_domain = website.split('://')[1]
         print("Started processing : " + website)
@@ -26,3 +25,8 @@ def main():
         collector.handle()
         pages = collector.get_suggested_pages()
         save_array_as_file('datasets/education/' + website_domain, pages)
+
+
+if __name__ == "__main__":
+    banner()
+    main()

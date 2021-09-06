@@ -84,6 +84,7 @@ class Collector:
                     for soup_link in soup_links:
                         link_href = soup_link.get('href')
                         filtered_link = self._filter_link(link_href)
+                        print(filtered_link)
                         if filtered_link:
                             self._suggested_pages.append(filtered_link) if filtered_link not in self._suggested_pages else self._suggested_pages
                 else:
@@ -94,6 +95,7 @@ class Collector:
                             try:
                                 link = link_href.split("&sa=U&url=")[1].split('&ved=')[0]
                                 filtered_link = self._filter_link(link)
+                                print(filtered_link)
                                 self._suggested_pages.append(filtered_link) if filtered_link not in self._suggested_pages else self._suggested_pages
                             except:
                                 continue

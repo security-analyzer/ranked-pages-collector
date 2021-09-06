@@ -7,4 +7,4 @@ api_proxy:
 
 collector:
   results_per_page: 100
-  max_pages: 5
+  max_pages: 1
