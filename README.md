@@ -4,11 +4,11 @@
   <img src="art/logo.png" alt="logo" />
 </p>
 
-Fully configurable automated python script to collect most visted pages based on dorks (google, bing)
+Fully configurable automated python script to collect most visted pages based on google dork
 
 ## Usage
 
-This project is still under developpement, its documentation is not yet implemented if you want to have an idea about how to use it you can check ```main.py``` file
+This project is still under developpement, its documentation is not yet implemented, But if you want to have an idea about how to use it you can check ```main.py``` file
 
 
 ## Security
