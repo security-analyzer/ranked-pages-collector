@@ -1,7 +1,7 @@
 # Ranked pages collector
 
 <p align="center">
-  <img src="art/banner.png" alt="logo" />
+  <img src="art/logo.png" alt="logo" />
 </p>
 <br>
 
