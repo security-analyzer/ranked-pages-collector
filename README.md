@@ -3,7 +3,6 @@
 <p align="center">
   <img src="art/logo.png" alt="logo" />
 </p>
-<br>
 
 Fully configurable automated python script to collect most visted pages based on dorks (google, bing)
 
