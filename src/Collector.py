@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
+
+from url_normalize.tools import unquote
 from src.ApiProxy import ApiProxy
 from bs4 import BeautifulSoup
 from url_normalize import url_normalize
@@ -47,10 +49,11 @@ class Collector:
 
     def _normalize_url(self, link):
         try:
-            url = re.search(r'url\?q=(.*?)&sa=', link).group(1)
+            link = url_normalize(link)
+            link = unquote(link).decode('utf8')
+            return link.strip('/')
         except:
-            url = link
-        return url_normalize(url)
+            return link.strip('/')
 
 
     def _filter_link(self, link):
@@ -74,16 +77,15 @@ class Collector:
     def handle(self):
         for i in range(self._max_page):
             url = self._get_current_page_url()
-            print(url)
             google_response = self._google_search(url)
             if google_response:
                 soup_links = google_response.select('div.yuRUbf > a')
                 if soup_links:
                     for soup_link in soup_links:
                         link_href = soup_link.get('href')
-                        filtred_link = self._filter_link(link_href)
-                        if filtred_link:
-                            self._suggested_pages.append(filtred_link)
+                        filtered_link = self._filter_link(link_href)
+                        if filtered_link:
+                            self._suggested_pages.append(filtered_link) if filtered_link not in self._suggested_pages else self._suggested_pages
                 else:
                     soup_links = google_response.find_all("a")
                     for soup_link in soup_links:
@@ -91,8 +93,8 @@ class Collector:
                         if link_href and "&sa=U&url=" in link_href and not "webcache" in link_href:
                             try:
                                 link = link_href.split("&sa=U&url=")[1].split('&ved=')[0]
-                                filtred_link = self._filter_link(link)
-                                self._suggested_pages.append(filtred_link)
+                                filtered_link = self._filter_link(link)
+                                self._suggested_pages.append(filtered_link) if filtered_link not in self._suggested_pages else self._suggested_pages
                             except:
                                 continue
 

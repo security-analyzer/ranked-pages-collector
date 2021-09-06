@@ -1,9 +1,28 @@
-
+from url_normalize.tools import unquote
+from src.Utils import save_array_as_file
 from src.Collector import Collector
 
-collector = Collector()
-collector.set_website('www.hespress.com')
-collector.handle()
-pages = collector.get_suggested_pages()
+websites = [
+    'https://www.uca.ma',
+    'https://fstbm.ac.ma',
+    'https://um6p.ma',
+    'https://www.uir.ac.ma',
+    'https://www.ueuromed.org',
+    'https://upm.ac.ma',
+    'https://www.emsi.ma',
+    'https://emi.ac.ma',
+    'https://www.groupeiscae.ma',
+    'https://www.encgcasa.ma',
+    'https://universiapolis.ma',
+    'https://www.ofppt.ma',
+]
 
-print(pages)
+def main():
+    for website in websites:
+        collector = Collector()
+        website_domain = website.split('://')[1]
+        print("Started processing : " + website)
+        collector.set_website(website_domain)
+        collector.handle()
+        pages = collector.get_suggested_pages()
+        save_array_as_file('datasets/education/' + website_domain, pages)
