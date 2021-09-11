@@ -2,29 +2,29 @@ from src.Utils import banner, save_array_as_file
 from src.Collector import Collector
 
 websites = [
-    'https://www.uca.ma',
-    'https://fstbm.ac.ma',
-    'https://um6p.ma',
-    'https://www.uir.ac.ma',
-    'https://www.ueuromed.org',
-    'https://upm.ac.ma',
-    'https://www.emsi.ma',
-    'https://emi.ac.ma',
-    'https://www.groupeiscae.ma',
-    'https://www.encgcasa.ma',
-    'https://universiapolis.ma',
-    'https://www.ofppt.ma',
+    'https://damanecash.ma',
+    'https://www.creditdumaroc.ma',
+    'https://www.umniabank.ma',
+    'https://www.cihbank.ma',
+    'https://attijarinet.attijariwafa.com',
+    'https://www.bmci.ma',
+    'https://bpnet.gbp.ma',
+    'https://www.wafasalaf.ma',
+    'https://www.cashplus.ma',
+    'https://www.sgmaroc.com',
+    'https://www.albaridbank.ma',
+    'https://www.creditagricole.ma',
 ]
 
 def main():
-    collector = Collector()
     for website in websites:
         website_domain = website.split('://')[1]
-        print("Started processing : " + website)
+        print("Started processing : " + website + " - " + website_domain)
+        collector = Collector()
         collector.set_website(website_domain)
         collector.handle()
         pages = collector.get_suggested_pages()
-        save_array_as_file('datasets/education/' + website_domain, pages)
+        save_array_as_file('datasets/finance/' + website_domain, pages)
 
 
 if __name__ == "__main__":

@@ -16,6 +16,7 @@ class Collector:
         self._per_page = configs['results_per_page']
         self._current_page = 0
         self._max_pages = configs['max_pages']
+        self._max_links = configs['max_links']
         self._suggested_pages = []
 
 
@@ -31,7 +32,7 @@ class Collector:
         self._website = website
 
 
-    def set_max_pagess(self, max_pages):
+    def set_max_pages(self, max_pages):
         self._max_pagess = max_pages
 
 
@@ -85,7 +86,10 @@ class Collector:
                         link_href = soup_link.get('href')
                         filtered_link = self._filter_link(link_href)
                         if filtered_link:
-                            self._suggested_pages.append(filtered_link) if filtered_link not in self._suggested_pages else self._suggested_pages
+                            if len(self._suggested_pages) < self._max_links:
+                                self._suggested_pages.append(filtered_link) if filtered_link not in self._suggested_pages else self._suggested_pages
+                            else:
+                                return
                 else:
                     soup_links = google_response.find_all("a")
                     for soup_link in soup_links:
@@ -94,7 +98,11 @@ class Collector:
                             try:
                                 link = link_href.split("&sa=U&url=")[1].split('&ved=')[0]
                                 filtered_link = self._filter_link(link)
-                                self._suggested_pages.append(filtered_link) if filtered_link not in self._suggested_pages else self._suggested_pages
+                                if filtered_link:
+                                    if len(self._suggested_pages) < self._max_links:
+                                        self._suggested_pages.append(filtered_link) if filtered_link not in self._suggested_pages else self._suggested_pages
+                                    else:
+                                        return
                             except:
                                 continue
 

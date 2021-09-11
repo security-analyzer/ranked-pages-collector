@@ -1,7 +1,7 @@
 import yaml
 
 def save_array_as_file(file_name, array):
-    with open(file_name, "w") as txt_file:
+    with open(file_name + '.txt', "w") as txt_file:
         for line in array:
             try:
                 if line:
